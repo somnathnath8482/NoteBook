@@ -18,6 +18,7 @@ public class NoteDetails extends AppCompatActivity {
 ActivityNoteDetailsBinding binding;
 NoteViewModel noteViewModel;
 Note note;
+    String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +26,7 @@ Note note;
         setContentView(binding.getRoot());
 
         noteViewModel = new NoteViewModel(getApplication());
-        String id = getIntent().getStringExtra("id");
+         id = getIntent().getStringExtra("id");
         id  = id==null?"":id;
       note  = noteViewModel.getNote(id);
 
@@ -41,20 +42,23 @@ Note note;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.details_menu, menu);
         return super.onCreateOptionsMenu(menu);
-
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        Toast.makeText(this, ""+item.getTitle(), Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.delete){
+            noteViewModel.delete(id);
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         if (note!=null){
+            note.setTitle(binding.title.getText().toString().trim());
+            note.setDescription(binding.description.getText().toString().trim());
             noteViewModel.update(note);
         }
     }

@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.easy.myapplication.Adapter.NoteAdapter;
 import com.easy.myapplication.Helper.IsAllFilled;
@@ -70,6 +72,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        ItemTouchHelper.SimpleCallback call_tocach = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                try {
+                    Note note  = noteAdapter.getCurrentList().get(viewHolder.getAdapterPosition());
+                    if (note!=null){
+                        noteViewModel.delete(note.getRid()+"");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(call_tocach);
+        itemTouchHelper.attachToRecyclerView(binding.recycler);
+
     }
 
 
@@ -99,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         an.btnAddNote.setOnClickListener(view1 -> {
-
             DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
