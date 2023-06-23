@@ -7,4 +7,6 @@ public interface OnClick {
     void Clicked(String item);
     void OnSuccess(String code, String message);
     void OnSuccess(List<String> list);
+    void OnSuccess(String... strings);
+    void OnSuccess(int... ints);
 }

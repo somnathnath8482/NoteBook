@@ -23,4 +23,14 @@ public class AllInterface implements OnClick{
 
     }
 
+    @Override
+    public void OnSuccess(String... strings) {
+
+    }
+
+    @Override
+    public void OnSuccess(int... ints) {
+
+    }
+
 }
